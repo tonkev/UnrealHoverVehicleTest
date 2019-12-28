@@ -45,12 +45,15 @@ void AHoverVehiclePawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	//Turn
 	Mesh->AddTorqueInRadians(FVector(0.f, 0.f, 1.f) * YawMaxTorque * YawInput);
 	
+	//Move
 	FRotator Rotator = GetActorRotation();
 	FVector Forward = FRotationMatrix(Rotator).GetUnitAxis(EAxis::X);
 	Mesh->AddForce(Forward * ThrustMaxForce * ThrustInput);
 
+	//Hover
 	FHitResult Hit;
 	FVector RayStart = CenterRaycast->GetComponentLocation();
 	FVector Up = FVector(0.f, 0.f, 1.f);
@@ -61,6 +64,7 @@ void AHoverVehiclePawn::Tick(float DeltaTime)
 		Mesh->AddForce(Up * HoverMaxForce * (1 - Hit.Time));
 	}
 
+	//Rotate Camera
 	FRotator SpringArmRotator = SpringArm->GetRelativeRotation();
 	if (bUsingGamepad)
 	{
@@ -73,8 +77,10 @@ void AHoverVehiclePawn::Tick(float DeltaTime)
 	}
 	SpringArm->SetRelativeRotation(SpringArmRotator);
 
+	//Update Missile Timer
 	LastFired += DeltaTime;
 
+	//Update Available Targets, Change Current Target if no longer in view
 	TargetsInView.Empty();
 	bool foundCurrentTarget = false;
 	AActor* FirstTarget = nullptr;
