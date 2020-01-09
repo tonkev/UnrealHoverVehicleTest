@@ -1,3 +1,5 @@
+![HoverVehicle Demo](HoverVehicleDemo.gif)
+
 This is an Unreal Engine practice project.
 
 Pilot a hover vehicle as you destroy enemy turrets in the area.
